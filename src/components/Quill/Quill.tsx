@@ -23,6 +23,7 @@ interface IState {
 
 const defaultOptions: QuillOptionsStatic = {};
 
+
 type WebViewRef = ReactNativeWebView | CommunityWebView | null;
 
 export class Quill extends React.Component<IProps, IState> {
@@ -32,6 +33,11 @@ export class Quill extends React.Component<IProps, IState> {
   private webView: WebViewRef = null;
 
   private fullHeightStyle: ViewStyle = {};
+
+  private webViewStyle: ViewStyle = {
+    ...this.fullHeightStyle,
+    backgroundColor: 'rgba(0,0,0,0)',
+  };
 
   private webViewStyle: ViewStyle = {
     ...this.fullHeightStyle,
@@ -53,13 +59,11 @@ export class Quill extends React.Component<IProps, IState> {
   //   if (newProps.content !== this.props.content) {
   //     this.sendMessage(EventType.CONTENT_CHANGE, newProps.content);
   //   }
-
   //   return (
   //     newState.html !== this.state.html || newProps.containerStyle != this.props.containerStyle
   //   );
 
   // }
-
   public render() {
     return (
       <View accessibilityLabel={this.props.accessibilityLabel} style={this.props.containerStyle}>

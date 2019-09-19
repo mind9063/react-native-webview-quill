@@ -1,6 +1,6 @@
 {
   "name": "react-native-webview-quill",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "",
   "main": "src/index.tsx",
   "scripts": {
@@ -46,6 +46,6 @@
     "typescript": "^3.3.3333"
   },
   "dependencies": {
-    "react-native-webview": "^5.2.1"
+    "react-native-webview": "^5.6.2"
   }
 }

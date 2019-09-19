@@ -24,6 +24,7 @@ export function generateWebViewIndex(
         <style>
           html,
           body {
+            height: 100%;
             margin: 0;
             padding: 0;
           }
@@ -44,7 +45,7 @@ export function generateWebViewIndex(
           }
 
           .quill-wrapper .ql-editor {
-            padding: 11px;
+            padding: 11px; 
             transition: all 0.2s;
           }
 
