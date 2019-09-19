@@ -3,9 +3,9 @@ import { DeltaStatic } from 'quill-delta';
 import { EventType } from '../interfaces/IMessage';
 import { IResources } from '../interfaces/IResources';
 
-/* This file contains HTML for the webview that contains Quill. You can use the es6-string-html, es6-string-css and 
+/* This file contains HTML for the webview that contains Quill. You can use the es6-string-html, es6-string-css and
    es6-string-javascript plugins for VSCode to get syntax highlighting on this file.
-   
+
    We input all EventType.{...} occurrences as variables in the template strings to enable type analysis for the event
    types, since they might be change sensitive. */
 
@@ -58,7 +58,7 @@ export function generateWebViewIndex(
 
           .quill-wrapper .ql-container.ql-snow.quill-focus,
           .quill-wrapper .ql-toolbar.ql-snow + .ql-container.ql-snow.quill-focus {
-            border-color: #00b050; 
+            border-color: #00b050;
           }
 
           .quill-wrapper .ql-toolbar.ql-snow {

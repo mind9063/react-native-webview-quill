@@ -18,11 +18,11 @@ interface IProps {
 
 interface IState {
   html: string | null;
+  height: number;
 }
 
-const defaultOptions: QuillOptionsStatic = {
-  theme: 'snow',
-};
+const defaultOptions: QuillOptionsStatic = {};
+
 
 type WebViewRef = ReactNativeWebView | CommunityWebView | null;
 
@@ -32,8 +32,11 @@ export class Quill extends React.Component<IProps, IState> {
   private ThemeProvider = providerRegistry.ThemeProvider;
   private webView: WebViewRef = null;
 
-  private fullHeightStyle: ViewStyle = {
-    flex: 1,
+  private fullHeightStyle: ViewStyle = {};
+
+  private webViewStyle: ViewStyle = {
+    ...this.fullHeightStyle,
+    backgroundColor: 'rgba(0,0,0,0)',
   };
 
   private webViewStyle: ViewStyle = {
@@ -45,22 +48,22 @@ export class Quill extends React.Component<IProps, IState> {
     super(props);
     this.state = {
       html: null,
+      height: 0,
     };
 
     this.onMessage = this.onMessage.bind(this);
     this.loadResources();
   }
 
-  public shouldComponentUpdate(newProps: IProps, newState: IState) {
-    if (newProps.content !== this.props.content) {
-      this.sendMessage(EventType.CONTENT_CHANGE, newProps.content);
-    }
+  // public shouldComponentUpdate(newProps: IProps, newState: IState) {
+  //   if (newProps.content !== this.props.content) {
+  //     this.sendMessage(EventType.CONTENT_CHANGE, newProps.content);
+  //   }
+  //   return (
+  //     newState.html !== this.state.html || newProps.containerStyle != this.props.containerStyle
+  //   );
 
-    return (
-      newState.html !== this.state.html || newProps.containerStyle != this.props.containerStyle
-    );
-  }
-
+  // }
   public render() {
     return (
       <View accessibilityLabel={this.props.accessibilityLabel} style={this.props.containerStyle}>
@@ -68,13 +71,21 @@ export class Quill extends React.Component<IProps, IState> {
           <ActivityIndicator size="large" style={this.fullHeightStyle} />
         ) : (
           <this.WebViewComponent
+            automaticallyAdjustContentInsets={false}
+            scrollEnabled={false}
             javaScriptEnabled={true}
             onMessage={this.onMessage}
             ref={this.registerWebView}
             useWebKit={true}
             scalesPageToFit={false}
             source={{ html: this.state.html }}
-            style={this.webViewStyle}
+            style={[this.webViewStyle, { height: this.state.height }]}
+            injectedJavaScript={`
+              setTimeout(function() {
+                window.postMessage(document.documentElement.scrollHeight);
+              }, 500);
+              true;
+            `}
           />
         )}
       </View>
@@ -116,6 +127,7 @@ export class Quill extends React.Component<IProps, IState> {
   }
 
   private onMessage(event: WebViewMessageEvent) {
+    this.setState({ height: parseInt(event.nativeEvent.data) });
     try {
       // TODO: Implement only sending delta's to save time on JSON parsing overhead
       this.processMessage(JSON.parse(event.nativeEvent.data));
