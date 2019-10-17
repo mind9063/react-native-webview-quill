@@ -1,7 +1,14 @@
 import { QuillOptionsStatic } from 'quill';
 import Delta from 'quill-delta';
 import * as React from 'react';
-import { ActivityIndicator, View, ViewStyle, WebView as ReactNativeWebView } from 'react-native';
+import {
+  ActivityIndicator,
+  View,
+  ViewStyle,
+  WebView as ReactNativeWebView,
+  Alert,
+  ScrollView,
+} from 'react-native';
 import { WebView as CommunityWebView } from 'react-native-webview';
 import { WebViewMessageEvent } from 'react-native-webview/lib/WebViewTypes';
 import { providerRegistry } from '../../ProviderRegistry/index';
@@ -23,7 +30,6 @@ interface IState {
 
 const defaultOptions: QuillOptionsStatic = {};
 
-
 type WebViewRef = ReactNativeWebView | CommunityWebView | null;
 
 export class Quill extends React.Component<IProps, IState> {
@@ -38,12 +44,6 @@ export class Quill extends React.Component<IProps, IState> {
     ...this.fullHeightStyle,
     backgroundColor: 'rgba(0,0,0,0)',
   };
-
-  private webViewStyle: ViewStyle = {
-    ...this.fullHeightStyle,
-    backgroundColor: 'rgba(0,0,0,0)',
-  };
-
   constructor(props: any) {
     super(props);
     this.state = {
@@ -66,7 +66,10 @@ export class Quill extends React.Component<IProps, IState> {
   // }
   public render() {
     return (
-      <View accessibilityLabel={this.props.accessibilityLabel} style={this.props.containerStyle}>
+      <ScrollView
+        accessibilityLabel={this.props.accessibilityLabel}
+        style={this.props.containerStyle}
+      >
         {this.state.html === null ? (
           <ActivityIndicator size="large" style={this.fullHeightStyle} />
         ) : (
@@ -74,12 +77,11 @@ export class Quill extends React.Component<IProps, IState> {
             automaticallyAdjustContentInsets={false}
             scrollEnabled={false}
             javaScriptEnabled={true}
+            domStorageEnabled={true}
             onMessage={this.onMessage}
             ref={this.registerWebView}
-            useWebKit={true}
-            scalesPageToFit={false}
             source={{ html: this.state.html }}
-            style={[this.webViewStyle, { height: this.state.height }]}
+            style={[this.webViewStyle, { height: this.state.height, maxHeight: 1000 }]}
             injectedJavaScript={`
               setTimeout(function() {
                 window.postMessage(document.documentElement.scrollHeight);
@@ -88,7 +90,7 @@ export class Quill extends React.Component<IProps, IState> {
             `}
           />
         )}
-      </View>
+      </ScrollView>
     );
   }
 
@@ -130,7 +132,7 @@ export class Quill extends React.Component<IProps, IState> {
     this.setState({ height: parseInt(event.nativeEvent.data) });
     try {
       // TODO: Implement only sending delta's to save time on JSON parsing overhead
-      this.processMessage(JSON.parse(event.nativeEvent.data));
+      // this.processMessage(JSON.parse(event.nativeEvent.data));
     } catch (error) {
       // tslint:disable-next-line:no-console
       console.warn('Ignoring unprocessable event from Quill WebView due to error: ', error);
