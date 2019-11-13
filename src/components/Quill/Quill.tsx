@@ -81,7 +81,12 @@ export class Quill extends React.Component<IProps, IState> {
             onMessage={this.onMessage}
             ref={this.registerWebView}
             source={{ html: this.state.html }}
-            style={[this.webViewStyle, { height: this.state.height, maxHeight: 1000 }]}
+            style={[
+              this.webViewStyle,
+              {
+                height: this.state.height,
+              },
+            ]}
             injectedJavaScript={`
               setTimeout(function() {
                 window.postMessage(document.documentElement.scrollHeight);

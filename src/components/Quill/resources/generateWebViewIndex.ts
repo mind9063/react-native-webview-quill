@@ -28,18 +28,28 @@ export function generateWebViewIndex(
           .quill-wrapper {
             display: flex;
             flex-direction: column;
-            height: 100%;
+            position: relative;
           }
           .quill-editor {
-            flex: 1 1 auto;
+            height: fit-content;
+            width: 100%;
           }
           .quill-wrapper .ql-container {
-            height: auto;
+            height: fit-content;
             font-size: 16px;
+            position: relative;
           }
           .quill-wrapper .ql-editor {
-            padding: 11px; 
+            padding: 11px;
             transition: all 0.2s;
+            position: relative;
+            height:fit-content;
+          }
+          .quill-wrapper .ql-editor p {
+            height: fit-content;
+          }
+          .quill-wrapper .ql-editor .ql-formula {
+            position: relative;
           }
           .quill-wrapper .ql-container.ql-snow,
           .quill-wrapper .ql-toolbar.ql-snow + .ql-container.ql-snow {
@@ -68,9 +78,8 @@ export function generateWebViewIndex(
       </head>
       <body>
       <script src="https://cdn.jsdelivr.net/npm/katex@0.11.0/dist/contrib/mathtex-script-type.min.js" integrity="sha384-LJ2FmexL77rmGm6SIpxq7y+XA6bkLzGZEgCywzKOZG/ws4va9fUVu2neMjvc3zdv"></script>
-        <div id="editor" class="quill-editor"></div>
         <div class="quill-wrapper">
-          <div class="quill-editor"></div>
+          <div id="editor" class="quill-editor"></div>
         </div>
         <script>
           ${resources.script};
